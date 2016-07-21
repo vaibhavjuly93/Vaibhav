@@ -1,0 +1,79 @@
+<?php
+
+
+/**
+ * Implementation of hook_init().
+ */
+function socbeez_support_init() {
+	drupal_add_js(drupal_get_path('module', 'socbeez_support') . '/js/socbeez_support.js'); 
+}
+
+/*implements hook menu*/
+function socbeez_support_form_alter(&$form, &$form_state, $form_id){
+	global $user;
+	//print '<pre>'; print_r($form_id); exit;
+	switch($form_id) {
+		
+	}
+}
+
+function socbeez_support_menu()
+{
+	$items['block-user'] = array(
+		'title' => t('Are you sure you want to Archive this user?'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('change_user_status_form'),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	$items['unblock-user'] = array(
+		'title' => t('Are you sure you want to Unarchive this user?'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('change_user_status_form'),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+  $items['teacher'] = array(
+	 	 'title' => t(''),
+		 'page callback' => 'teacher',
+		 'page arguments' => array('teacher'),
+		 'access callback' => TRUE,
+		 'type' => MENU_CALLBACK,	
+	);
+	return $items;
+}
+function teacher(){
+print_r($_POST['section']);exit;
+	global $user , $base_url;
+	$userDets = user_load($user->uid);
+	$form['choice'] = array(
+    '#type' => 'select',
+    '#options' => $options,
+    '#title' => t('Select Teacher'),
+    );
+	return $form; 
+}
+function change_user_status_form(){
+	$form['yes'] = array(
+        '#type' => 'submit',
+        '#value' => t('Yes'),
+        '#submit' => array('change_user_status'),
+				);
+	$form['no'] = array(
+        '#type' => 'submit',
+        '#value' => t('NO'),
+     		);
+	return $form;
+}
+
+function change_user_status(){
+	$uid = $_GET['uid'];	
+	$user = user_load($uid);
+	if($user->status)
+		$user->status = 0;
+	else
+		$user->status = 1;
+	user_save($user, $edit = array());
+
+}
