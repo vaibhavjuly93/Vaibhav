@@ -1,0 +1,7 @@
+name = socbeez_support
+description = Provide support for User active and inactive
+core = 7.x
+version = 7.x-custom
+project = "Socbeez"
+package = "Socbeez"
+
